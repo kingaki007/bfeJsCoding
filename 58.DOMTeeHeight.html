@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>DOM Tree Height</title>
+    </head>
+    <body>
+        <div id="test">
+            <div>
+                <div>
+                    <p>
+                        <span></span>
+                    </p>
+                </div>
+            </div>
+        </div>
+        <script>
+            function getHeightRec(tree) {
+                let height = 0;
+
+                if (!tree) {
+                    return height;
+                }
+
+                for (let child of tree.children) {
+                    height = Math.max(height, getHeightRec(child));
+                }
+                return height + 1;
+            }
+
+            function heightIterBFS(tree) {
+                let height = 0;
+                const q = [[tree, 1]]; // node, level
+                while (q.length > 0) {
+                    const [node, level] = q.shift();
+                    height = Math.max(height, level);
+
+                    const children = Array.from(node.children);
+                    children.forEach((child) => {
+                        q.push([child, level + 1]);
+                    });
+                }
+
+                return height;
+            }
+            console.log(heightIterBFS(document.getElementById("test")));
+            console.log(heightIterBFS(document.createElement("p")));
+        </script>
+    </body>
+</html>
